@@ -1,5 +1,5 @@
 from __future__ import division
-from i_2_2 import *
+from assignment1.i_2_2 import *
 
 import numpy as np
 import matplotlib.pyplot as mpl
