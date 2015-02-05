@@ -2,3 +2,8 @@
 .project
 .pydevproject
 *.tex~
+*.aux
+*.log
+*.pdf
+*.gz
+*.toc
