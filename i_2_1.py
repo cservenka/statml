@@ -1,7 +1,7 @@
 from __future__ import division
 
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as mpl
 import math
 
 mu = -1
@@ -13,6 +13,8 @@ def gauss(x):
 x = np.arange(-10.0, 10.0, 0.1)
 y = np.arange(0.0, 10.0, 1.0)
 
-plt.plot(x, gauss(x))
-plt.ylabel('some numbers')
-plt.show()
+mpl.plot(x, gauss(x))
+mpl.ylabel('some numbers')
+
+if __name__ == '__main__':
+	mpl.show()
