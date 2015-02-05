@@ -4,7 +4,6 @@ import matplotlib.pyplot as mpl
 mu = np.array([1,2]).T
 Sigma = np.array([[0.3, 0.2], [0.2, 0.2]])
 L = np.linalg.cholesky(Sigma)
-z = np.random.randn(2)
 
 x = []
 y = []
