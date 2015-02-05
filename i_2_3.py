@@ -1,5 +1,5 @@
 from __future__ import division
-import i_2_2
+from i_2_2 import *
 
 import numpy as np
 import matplotlib.pyplot as mpl
@@ -11,8 +11,9 @@ def uml(lst):
 		n += x
 	return (1/N) * n
 
-ml = uml(i_2_2.l.T)
-mpl.plot(ml[0], ml[1], 'bo')
+ml = uml(l.T)
 
-mpl.show()
-
+if __name__ == '__main__':
+	mpl.plot(l[0,], l[1,], 'ro')
+	mpl.plot(ml[0], ml[1], 'bo')
+	mpl.show()

@@ -12,23 +12,21 @@ def gauss(x):
 
 x = np.arange(-10.0, 10.0, 0.1)
 
-mpl.plot(x, gauss(x))
-mpl.ylabel('some numbers')
-
-mpl.plot(x, gauss(x))
-
-mu = 0
-sigma = 2
-
-mpl.plot(x, gauss(x))
-
-mu = 2
-sigma = 3
-
-mpl.plot(x, gauss(x))
-
-mpl.ylabel('gaussian distribution')
-mpl.show()
-
 if __name__ == '__main__':
+	mpl.plot(x, gauss(x))
+	mpl.ylabel('some numbers')
+
+	mpl.plot(x, gauss(x))
+
+	mu = 0
+	sigma = 2
+
+	mpl.plot(x, gauss(x))
+
+	mu = 2
+	sigma = 3
+
+	mpl.plot(x, gauss(x))
+
+	mpl.ylabel('gaussian distribution')
 	mpl.show()

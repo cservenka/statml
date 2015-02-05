@@ -15,7 +15,6 @@ for i in xrange(100):
 
 l = np.array([np.array(x), np.array(y)])
 
-mpl.plot(l[0,], l[1,], 'ro')
-
 if __name__ == '__main__':
+	mpl.plot(l[0,], l[1,], 'ro')
 	mpl.show()
