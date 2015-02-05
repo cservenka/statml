@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as mpl
 
-my = np.array([1,2]).T
+mu = np.array([1,2]).T
 Sigma = np.array([[0.3, 0.2], [0.2, 0.2]])
 L = np.linalg.cholesky(Sigma)
 z = np.random.randn(2)
@@ -9,7 +9,7 @@ z = np.random.randn(2)
 x = []
 y = []
 for i in xrange(100):
-	temp = my + np.dot(L, np.random.randn(2))
+	temp = mu + np.dot(L, np.random.randn(2))
 	x.append(temp[0])
 	y.append(temp[1])
 
