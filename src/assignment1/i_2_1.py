@@ -5,13 +5,13 @@ import matplotlib.pyplot as mpl
 import math
 
 # Compute the y-value of the univariate Gaussian density function
-# with the given mu and sigma parameters corresponding to the
+# (with the given mu and sigma parameters) corresponding to the
 # given x-value.
 def gauss(mu, sigma, x):
 	return (1 / (2 * math.pi * (sigma ** 2)) ** (1 / 2)) * \
 		np.exp(-1 / (2 * (sigma ** 2)) * ((x - mu) ** 2))
 
-if __name__ == '__main__':
+def run():
 	# The range of x-values to plot.
 	xs = np.arange(-10.0, 10.0, 0.1)
 	
@@ -27,3 +27,6 @@ if __name__ == '__main__':
 	
 	mpl.ylabel('gaussian distributions')
 	mpl.show()
+
+if __name__ == '__main__':
+	run()

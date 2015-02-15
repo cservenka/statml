@@ -1,5 +1,5 @@
 from __future__ import division
-from i_2_2 import dataset
+import i_2_2
 
 import matplotlib.pyplot as mpl
 
@@ -12,12 +12,17 @@ def muML(dataset):
 		n += x
 	return (1/N) * n
 
-if __name__ == '__main__':
+def run(dataset):
 	# Plot the data set.
 	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
 	
-	# Get the sample mean and plot it.
+	# Compute the sample mean and plot it.
 	mean = muML(dataset)
 	mpl.plot(mean[0], mean[1], 'bo')
 	
+	mpl.ylabel('Sample together with maximum likelihood mean (in blue)')
 	mpl.show()
+
+if __name__ == '__main__':
+	(dataset, _) = i_2_2.run()
+	run(dataset)

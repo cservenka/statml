@@ -1,9 +1,7 @@
 import os.path
 import math
 import numpy as np
-import operator
 import collections
-import copy
 
 def readFile(filename):
 	#Interpret first two columns as floats, last column as int
@@ -13,7 +11,7 @@ def readFile(filename):
 	return [map(toNum, enumerate(line.strip().split(' '))) for line in open(filename)]
 
 #Get euclidean distance between two data points
-def euclideanMetric(a, b, length):
+def euclideanMetric(a, b):
 	#Length is in mm
 	x1 = (a[0] - b[0]) ** 2
 	#Width is in cm (so mult by 10)
@@ -22,7 +20,7 @@ def euclideanMetric(a, b, length):
 
 def getNeighbors(train, new, k):
 	#Get first k elements of data set sorted ascendingly by distance from new data point
-	sortPred = lambda e: euclideanMetric(new, e, len(new)-1)
+	sortPred = lambda e: euclideanMetric(new, e)
 	return sorted(train, key = sortPred)[:k]
 
 #Get most common type amongst neighbors (as integer)
@@ -34,16 +32,28 @@ def getSpecies(test):
 	return [e[-1] for e in test]
 
 #Get 1 minus the mean of the 0-1 loss for each data entry
-def getAccuracy(actual, predicted):
-	loss = lambda (p, r): 0 if p is r else 1
+#def getAccuracy(actual, predicted):
+def getAccuracy(k, train, dataset):
+	actual = getSpecies(dataset)
+	predicted = [getMajority(getNeighbors(train, e, k)) for e in dataset]
+	loss = lambda (p, r): 0 if p == r else 1
 	return 1 - np.mean(map(loss, zip(actual, predicted)))
 
-if __name__ == '__main__':
+def run():
 	train = readFile(os.path.dirname(__file__) + '/../../data/IrisTrain2014.dt')
 	test = readFile(os.path.dirname(__file__) + '/../../data/IrisTest2014.dt')
-
-	for i in [1, 3, 5]:
-		print "Training set K = %d Accuracy = %s" % (i, getAccuracy(getSpecies(train), [getMajority(getNeighbors(train, e, i)) for e in train]))
+	
+	# Report accuracy for training set.
+	print "Training set:"
+	for k in [1, 3, 5]:
+		print "K = %d: Accuracy = %s" % (k, getAccuracy(k, train, train))
+	
 	print ""
-	for i in [1, 3, 5]:
-		print "Test set K = %d Accuracy = %s" % (i, getAccuracy(getSpecies(test), [getMajority(getNeighbors(train, e, i)) for e in test]))
+	
+	# Report accuracy for test set.
+	print "Test set:"
+	for k in [1, 3, 5]:
+		print "K = %d: Accuracy = %s" % (k, getAccuracy(k, train, test))
+
+if __name__ == '__main__':
+	run()
