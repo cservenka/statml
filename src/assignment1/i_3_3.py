@@ -2,7 +2,6 @@ from __future__ import division
 
 import os
 import numpy as np
-import matplotlib.pyplot as mpl
 
 from i_2_3 import muML
 from i_3_1 import readFile, getAccuracy
