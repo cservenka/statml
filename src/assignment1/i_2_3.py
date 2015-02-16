@@ -1,5 +1,6 @@
 from __future__ import division
 import i_2_2
+from i_2_2 import mu
 
 import matplotlib.pyplot as mpl
 
@@ -17,8 +18,11 @@ def run(dataset):
 	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
 	
 	# Compute the sample mean and plot it.
-	mean = muML(dataset)
-	mpl.plot(mean[0], mean[1], 'bo')
+	sampleMean = muML(dataset)
+	mpl.plot(sampleMean[0], sampleMean[1], 'bo')
+	
+	# Plot distribution mean.
+	mpl.plot(mu[0], mu[1], 'mo')
 	
 	mpl.ylabel('Sample together with maximum likelihood mean (in blue)')
 	mpl.show()
