@@ -24,7 +24,7 @@ def run(dataset):
 	# Plot distribution mean.
 	mpl.plot(mu[0], mu[1], 'mo')
 	
-	mpl.ylabel('Sample together with maximum likelihood mean (in blue)')
+	mpl.ylabel('Sample with sample mean (blue) and distribution mean (magenta)')
 	mpl.show()
 
 if __name__ == '__main__':
