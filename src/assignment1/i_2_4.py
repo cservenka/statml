@@ -58,7 +58,9 @@ def run(dataset, zValues):
 	# Plot the data set.
 	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
 	
-	mpl.ylabel('Sample together with eigenvectors')
+	mpl.title('Sample together with eigenvectors')
+	mpl.ylabel('y')
+	mpl.xlabel('x')
 	
 	# Draw the eigenvectors of the covariance matrix on top of the data set.
 	drawEigenVectors(dataset)
@@ -76,9 +78,14 @@ def run(dataset, zValues):
 	for i in range(len(angles)):
 		Sigma_theta = rotate(Sigma, angles[i])
 		new_dataset = generateSamples(zValues, mu, Sigma_theta)
-		mpl.plot(new_dataset.T[0,], new_dataset.T[1,], colours[i]+shapes[i])
+		mpl.plot(new_dataset.T[0,], new_dataset.T[1,], colours[i]+shapes[i], label="Rotated "+str(angles[i]) +" degrees")
 	
-	mpl.ylabel('Sample rotated 30, 60, and 90 degrees')
+	mpl.title('Sample rotated 30, 60, and 90 degrees')
+	mpl.ylabel('y')
+	mpl.xlabel('x')
+
+	# reverse the order
+	mpl.legend()
 	mpl.show()
 
 if __name__ == '__main__':

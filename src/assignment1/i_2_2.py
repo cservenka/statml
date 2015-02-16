@@ -44,7 +44,9 @@ def run():
 	# transpose the data set.
 	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
 	
-	mpl.ylabel('Sample from 2D gaussian distribution')
+	mpl.title('Sample from 2D gaussian distribution')
+	mpl.ylabel('y')
+	mpl.xlabel('x')
 	mpl.show()
 	
 	# Return the data set and the random 2D points for later use.

@@ -25,7 +25,9 @@ def run():
 		sigma = sigmas[i]
 		mpl.plot(xs, gauss(mu,sigma,xs))
 	
-	mpl.ylabel('gaussian distributions')
+	mpl.title('Gaussian distributions')
+	mpl.ylabel('y')
+	mpl.xlabel('x')
 	mpl.show()
 
 if __name__ == '__main__':

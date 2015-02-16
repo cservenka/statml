@@ -1,5 +1,4 @@
-from assignment1 import i_2_1, i_2_2,\
-i_2_3, i_2_4, i_3_1, i_3_2, i_3_3
+import i_2_1, i_2_2, i_2_3, i_2_4, i_3_1, i_3_2, i_3_3
 
 def continuePrompt():
     print 'Press ENTER to continue'
