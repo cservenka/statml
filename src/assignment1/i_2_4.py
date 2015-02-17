@@ -53,18 +53,19 @@ def drawEigenVectors(dataset):
 	
 	# Draw the vectors.
 	ax = mpl.gca()
-	ax.quiver(startXs,startYs,vectorXs,vectorYs,angles='xy',scale_units='xy',scale=1)
+	ax.quiver(startXs,startYs,vectorXs,vectorYs,angles='xy',scale_units='xy',scale=1, label="Eigen Vectors")
 
 	# Return calculated points for finding the degrees needed to rotated into alignment with x-axis
 	return [startXs, startYs, vectorXs, vectorYs]
 
 def run(dataset, zValues):
 	# Plot the data set.
-	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
+	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro', label="Data set")
 	
 	mpl.title('Sample together with eigenvectors')
 	mpl.ylabel('y')
 	mpl.xlabel('x')
+	mpl.legend()
 	
 	# Draw the eigenvectors of the covariance matrix on top of the data set.
 	[startXs, startYs, vectorXs, vectorYs] = drawEigenVectors(dataset)
