@@ -24,7 +24,7 @@ def determineBestK(train):
     results = []
     for i in range(1, 27, 2):
         result = nFoldCrossValidation(5, i, train)
-        print "i = %d: Validation-result = %s" % (i, result)
+        print "k = %d: Validation-result = %s" % (i, result)
         #results.append((i, nFoldCrossValidation(5, i, train)))
         results.append((i, result))
     
