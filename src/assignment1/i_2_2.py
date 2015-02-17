@@ -42,11 +42,12 @@ def run():
 	# Plot the data set. When plotting, we must transform our list
 	# of pairs into a pair of lists (x and y lists). Therefore, we
 	# transpose the data set.
-	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
+	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro', label="Gaussian distribution")
 	
 	mpl.title('Sample from 2D gaussian distribution')
 	mpl.ylabel('y')
 	mpl.xlabel('x')
+	mpl.legend()
 	mpl.show()
 	
 	# Return the data set and the random 2D points for later use.

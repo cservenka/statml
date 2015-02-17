@@ -71,7 +71,9 @@ def run(dataset, zValues):
 
 	# Find the current angle of the data set with respect to the x-axis. If we rotate the samples this amount of degrees clockwise
 	# The samples aligns with the x-axis.
-	zeroAxisDeg = math.atan2((startYs[0] + vectorYs[0])-startYs[0], (startXs[0] + vectorXs[0])-startXs[0]) * (180 / math.pi) 
+	zeroAxisDeg = math.atan2((startYs[0] + vectorYs[0])-startYs[0], (startXs[0] + vectorXs[0])-startXs[0]) * (180 / math.pi)
+	if (zeroAxisDeg < 0):
+		zeroAxisDeg += 360
 	
 	# Create a new figure.
 	mpl.figure()
@@ -86,10 +88,11 @@ def run(dataset, zValues):
 	for i in range(len(angles)):
 		Sigma_theta = rotate(Sigma, angles[i])
 		new_dataset = generateSamples(zValues, mu, Sigma_theta)
-		drawEigenVectors(new_dataset)
+		if (i == 1):
+			drawEigenVectors(new_dataset)
 		mpl.plot(new_dataset.T[0,], new_dataset.T[1,], colours[i]+shapes[i], label="Rotated "+str(angles[i]) +" degrees")
 	
-	mpl.title('Sample rotated 30, 60, and 90 degrees')
+	mpl.title('Sample rotated 30,'+str(zeroAxisDeg)+', 60, and 90 degrees')
 	mpl.ylabel('y')
 	mpl.xlabel('x')
 
