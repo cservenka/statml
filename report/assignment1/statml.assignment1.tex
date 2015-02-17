@@ -63,7 +63,7 @@ Figure~\ref{fig:samples_with_mean} shows the sample mean and the distribution me
 As shown in Figure~\ref{fig:samples_with_mean}, the Sample mean is $(1, 2)$ and the Distribution mean is $(1.06221568829, 2.00008779983)$ for an arbitrary execution. The Distribution mean deviates from the Sample mean since the generated data set only contains a hundred points. If the generated set were larger, the precision would increase, thus lowering the deviation between the Sample- and Deviation mean.
 
 \subsection{Covariance: The Geometry of Multivariate Gaussian Distributions}
-Figure~\ref{fig:samples_with_eigenvectors} shows the scaled and translated eigenvectors plotted on top of the sampled data set. As we saw in the lectures, the two eigenvectors represent the ``main directions'' of the covariance matrix (i.e., the directions of variance in the data set), and the eigenvalue represents the scale of the variance in the direction of the corresponding eigenvector.
+Figure~\ref{fig:samples_with_eigenvectors} shows the scaled and translated eigenvectors plotted on top of the sampled data set. As we saw in the lectures, the two eigenvectors represent the ``main directions'' of the covariance matrix (i.e., the directions of variance in the data set), and an eigenvalue represents the scale of the variance in the direction of the corresponding eigenvector.
 
 \begin{figure}[H]
   \centering
@@ -72,7 +72,7 @@ Figure~\ref{fig:samples_with_eigenvectors} shows the scaled and translated eigen
   \label{fig:samples_with_eigenvectors}
 \end{figure}
 
-Figure~\ref{fig:samples_rotated} shows samples from the rotated distributions for 30, 60 and 90 degree rotations of the covariance matrix. We have used the same randomly drawn z-values that generated the data set in I.2.2, so this is essentially the same data set as before, only rotated as we can see in the figure. Furthermore, the figure also the data set rotated by the angle $\phi$, computed as 43.9204246244 degrees in the depicted run, which causes the main direction of the data set to point along the $x$-axis of the figure. 
+Figure~\ref{fig:samples_rotated} shows samples from the rotated distributions for 30, 60 and 90 degree rotations of the covariance matrix. We have used the same randomly drawn z-values that generated the data set in I.2.2, so this is essentially the same data set as before, only rotated as we can see in the figure. Furthermore, the figure also shows the data set rotated by the angle $\phi$, computed as 43.9204246244 degrees in the depicted run, which causes the main direction of the data set to point along the $x$-axis of the figure. 
 
 % Done: Find angle theta such that the main direction of the data points along the x axis.
 
@@ -104,15 +104,13 @@ Using the \texttt{IrisTrain2014.dt}-file as training data with the implemented $
 \end{figure}
 
 % TODO: Finish this argument
-The classification of the training set with $k=1$ gives a $100\%$ as each data point is classified directly, as expected. As the $k$-value increases, the training set accuracy decreases as the number of neighbor-points increases, thus lowering the accuracy of the classification. For the test set, $k=1$ and $k=3$ give the same results. Increasing to $k=5$ decreases the accuracy which could indicate that the classification is quite sensitive to its surrounding neighbours.
+The classification of the training set with $k=1$ gives a $100\%$ accuracy as each data point is classified directly, as expected. As the $k$-value increases, the training set accuracy decreases as the number of neighbor-points increases, thus lowering the accuracy of the classification. For the test set, $k=1$ and $k=3$ give the same results. Increasing to $k=5$ decreases the accuracy which could indicate that the classification is quite sensitive to its surrounding neighbours.
 
 
 \subsection{Hyperparameter Selection using Cross-validation}
 The 5-fold cross validation was implemented in the form of an $N$-fold cross validation algorithm. The algorithm performs the cross validation by splitting an input training set into $N$ equally-sized parts, calculating the accuracy of each part with respect to the remaining parts and finally returning the mean of the calculated accuracies.\\
 
-The hyperparameter selection suggested that the optimal number of neighbors were $k = 17$, as shown in figure~\ref{fig:5-fold_results}\\
-
-The cross-validation implementation found $k_{best} = 17$ which upon estimating the performance using the test data resulted in an accuracy of $76\%$, as shown in figure \ref{fig:5-fold_results}. 
+The hyperparameter selection suggested that the optimal number of neighbors were $k_{\text{best}} = 17$, as shown in figure~\ref{fig:5-fold_results}. Estimating the performance of the $k_{\text{best}}$-NN classifier using the test data resulted in an accuracy of $76\%$, as shown in figure \ref{fig:5-fold_results}. 
 
 \begin{figure}[H]
 	\begin{lstlisting}
@@ -138,7 +136,9 @@ The cross-validation implementation found $k_{best} = 17$ which upon estimating 
 \end{figure}
 
 \subsection{Data Normalization}
+From linearity of expectation we have that $\mathbb{E}[X + c] = \mathbb{E}[X] + c$. Thus, in order to transform a feature of the training data to have zero mean, we simply subtract $\mu$ from every data point. Of course, we don't know the true $\mu$, so we must use the estimate $\mu_{\text{ML}}$. From linearity of expectation we also have that $\mathbb{E}[aX] = a\mathbb{E}[X]$. This implies that $\text{var}[aX] = \mathbb{E}[(aX)^2] - \mathbb{E}[aX]^2 = \mathbb{E}[a^2X^2] - (a\mathbb{E}[X])^2 = a^2\mathbb{E}[X^2] - a^2\mathbb{E}[X]^2 = a^2(\mathbb{E}[X^2] - \mathbb{E}[X]^2) = a^2\text{var}[X]$. Thus, in order to transform a feature of the training data to have unit variance, we divide every data point by the square root of the variance (i.e., by the standard deviation). That is, we select $a = 1 / \sqrt{\text{var}[X]}$ in the calculation above. Again, we must use $\sigma^2_{\text{ML}}$, the estimate of the variance.\\
 
+Figure~\ref{fig:normalization_results} shows the results. For the normalized training set we see that the mean of both features is (practically) zero and the variance is 1. The mean and variance for both features of the normalized test set are also shown. When repeating exercise I.3.2 with the normalized data, we see that the optimal number of neighbors is $k_{\text{best}} = 1$. For the training set this gives an accuracy of $100\%$, as expected. Unlike for the raw data, we see that now the accuracy of the $k_{\text{best}}$-NN classifier on the test data actually matches the accuracy obtained in the cross-validation. Additionally, the test set accuracy of the $k_{\text{best}}$-NN classifier has increased from $76\%$ to almost $79\%$ when using the normalized data sets.
 
 \begin{figure}[H]
 	\begin{lstlisting}
