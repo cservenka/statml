@@ -23,7 +23,8 @@ def getNeighbors(train, new, k):
 	sortPred = lambda e: euclideanMetric(new, e)
 	return sorted(train, key = sortPred)[:k]
 
-#Get most common type amongst neighbors (as integer)
+#Get most common type amongst neighbors (as integer). Together with the getNeighbors function,
+#this is our implementation of the k-NN classifier.
 def getMajority(neighbors):
 	return collections.Counter(map(lambda nb : nb[-1], neighbors)).most_common(1)[0][0]
 
