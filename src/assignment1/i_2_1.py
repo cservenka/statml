@@ -23,11 +23,12 @@ def run():
 	for i in range(len(mus)):
 		mu = mus[i]
 		sigma = sigmas[i]
-		mpl.plot(xs, gauss(mu,sigma,xs))
+		mpl.plot(xs, gauss(mu,sigma,xs), label="Mu = "+str(mu)+", sigma = "+str(sigma))
 	
 	mpl.title('Gaussian distributions')
 	mpl.ylabel('y')
 	mpl.xlabel('x')
+	mpl.legend()
 	mpl.show()
 
 if __name__ == '__main__':
