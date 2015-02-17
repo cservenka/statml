@@ -5,6 +5,7 @@ from i_2_3 import muML
 
 import numpy as np
 import matplotlib.pyplot as mpl
+import math
 
 # Compute the maximum likelihood sample covariance matrix of
 # a given data set.
@@ -54,6 +55,9 @@ def drawEigenVectors(dataset):
 	ax = mpl.gca()
 	ax.quiver(startXs,startYs,vectorXs,vectorYs,angles='xy',scale_units='xy',scale=1)
 
+	# Return calculated points for finding the degrees needed to rotated into alignment with x-axis
+	return [startXs, startYs, vectorXs, vectorYs]
+
 def run(dataset, zValues):
 	# Plot the data set.
 	mpl.plot(dataset.T[0,], dataset.T[1,], 'ro')
@@ -63,21 +67,26 @@ def run(dataset, zValues):
 	mpl.xlabel('x')
 	
 	# Draw the eigenvectors of the covariance matrix on top of the data set.
-	drawEigenVectors(dataset)
+	[startXs, startYs, vectorXs, vectorYs] = drawEigenVectors(dataset)
+
+	# Find the current angle of the data set with respect to the x-axis. If we rotate the samples this amount of degrees clockwise
+	# The samples aligns with the x-axis.
+	zeroAxisDeg = math.atan2((startYs[0] + vectorYs[0])-startYs[0], (startXs[0] + vectorXs[0])-startXs[0]) * (180 / math.pi) 
 	
 	# Create a new figure.
 	mpl.figure()
 
 	# Angles to rotate by.
-	angles = [30,60,90]
-	shapes = ['o','^','s']
-	colours = ['b','c','r']
+	angles = [30, zeroAxisDeg, 60,90]
+	shapes = ['o','*', '^','s']
+	colours = ['b','y','c','r']
 
 	# For each angle, rotate the covariance matrix and generate a new sample (using the
 	# same z-values as earlier).
 	for i in range(len(angles)):
 		Sigma_theta = rotate(Sigma, angles[i])
 		new_dataset = generateSamples(zValues, mu, Sigma_theta)
+		drawEigenVectors(new_dataset)
 		mpl.plot(new_dataset.T[0,], new_dataset.T[1,], colours[i]+shapes[i], label="Rotated "+str(angles[i]) +" degrees")
 	
 	mpl.title('Sample rotated 30, 60, and 90 degrees')
