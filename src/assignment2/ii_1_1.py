@@ -12,7 +12,7 @@ def readFile(filename):
 	return [map(toNum, enumerate(line.strip().split(' '))) for line in open(filename)]
 
 # Returns delta_k
-def get_delta_k(x, mu_k, sigma, prior):
+def getDelta_k(x, mu_k, sigma, prior):
 	x = np.matrix(x)
 	mu_k = np.matrix(mu_k)
 	sigma = np.matrix(sigma)
@@ -20,25 +20,25 @@ def get_delta_k(x, mu_k, sigma, prior):
 
 	return (x*sig_inv*mu_k.T - 0.5*mu_k*sig_inv*mu_k.T + np.log(prior)).item(0)
 
-# Returns Mu for a given class
-def get_mu_k(s_k):
+# Returns mu_k for a given class
+def getMu_k(s_k):
 	return (1 / len(s_k)) * np.sum(s_k, axis=0)
 
 # Returns Sigma
-def get_sigma(dataset, splitset):
+def getSigma(dataset, splitset):
 	l = len(dataset)
-	m = 3
+	m = len(set(getSpecies(dataset)))
 	res = 0
 	for k in xrange(m):
-		mu_k = get_mu_k(splitset[k])
+		mu_k = getMu_k(splitset[k])
 		res_k = 0
 		for i in splitset[k]:
 			res_k += np.outer((i - mu_k), (i-mu_k).T) 
 		res += res_k
 	return (1 / (len(dataset) - m)) * res
 
-# Returns the prior
-def get_prior_k(splitset, dataset):
+# Returns the prior_k
+def getPrior_k(splitset, dataset):
 	return len(splitset) / len(dataset)
 
 # Groups a dataset by its species
@@ -48,23 +48,24 @@ def split(dataset, m):
 		res[int(elem[-1])].append(elem[:-1])
 	return np.array(res)
 
-# Classifies a dataset using Linear discriminant analysis
-def classify(dataset):
-	res = []
-	splitset = split(dataset, 3)
-	sigma = get_sigma(dataset, splitset)
-	for x in dataset:
-		lst = []
-		for k in xrange(3):
-			mu = get_mu_k(splitset[k])
-			prior = get_prior_k(splitset[k], dataset)
-			lst.append((k, get_delta_k(x[:-1], mu, sigma, prior)))
-		res.append((x, max(lst, key=operator.itemgetter(1))[0]))
-	return res
-
 #Get list of species (as int) from a data set
 def getSpecies(dataset):
 	return [e[-1] for e in dataset]
+
+# Classifies a dataset using Linear discriminant analysis
+def classify(dataset):
+	res = []
+	m = len(set(getSpecies(dataset)))
+	splitset = split(dataset, m)
+	sigma = getSigma(dataset, splitset)
+	for x in dataset:
+		lst = []
+		for k in xrange(m):
+			mu = getMu_k(splitset[k])
+			prior = getPrior_k(splitset[k], dataset)
+			lst.append((k, getDelta_k(x[:-1], mu, sigma, prior)))
+		res.append((x, max(lst, key=operator.itemgetter(1))[0]))
+	return res
 
 #Get 1 minus the mean of the 0-1 loss for each data entry
 def getAccuracy(dataset):
