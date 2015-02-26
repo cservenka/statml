@@ -45,7 +45,7 @@ def get_prior_k(splitset, dataset):
 def split(dataset, m):
 	res = [[] for x in xrange(m)]
 	for elem in dataset:
-		res[elem[-1]].append(elem[:-1])
+		res[int(elem[-1])].append(elem[:-1])
 	return np.array(res)
 
 # Classifies a dataset using Linear discriminant analysis
@@ -77,8 +77,9 @@ def run():
 	train = readFile(os.path.dirname(__file__) + '/../../data/IrisTrain2014.dt')
 	test = readFile(os.path.dirname(__file__) + '/../../data/IrisTest2014.dt')
 
-	print "Accuracy of LDA on training dataset: " + str(getAccuracy(train))
-	print "Accuracy of LDA on test dataset: " + str(getAccuracy(test))
+	# Perform LDA and print accuracy results for both sets
+	print "Accuracy of LDA on training dataset: %s" % getAccuracy(train)
+	print "Accuracy of LDA on test dataset: %s" % getAccuracy(test)
 	
 if __name__ == '__main__':
 	run()
