@@ -31,8 +31,33 @@
 \section{Classification}
 
 \subsection{Linear discriminant analysis}
+Upon execution of the implemented linear discriminant analysis of the training- and test-set, the following accuracy results are obtained
+\begin{figure}[H]
+	\begin{lstlisting}
+	Accuracy of LDA on training dataset: 0.86
+	Accuracy of LDA on test dataset: 0.815789473684
+	\end{lstlisting}
+	\caption{Training and test accuracy results of the implemented LDA algorithm}
+	\label{fig:lda_results}
+\end{figure}
 
 \subsection{LDA and normalization}
+After normalization of the training and test dataset, the following accuracy results are obtained after executing the linear discriminant analysis on them
+\begin{figure}[H]
+	\begin{lstlisting}
+	Training set, feature = 0: Mean = -3.46833672893e-15, variance = 1.0
+	Training set, feature = 1: Mean = -1.81743509131e-15, variance = 1.0
+	Test set, feature = 0: Mean = 0.208375768039, variance = 1.07339795338
+	Test set, feature = 1: Mean = 0.432138257729, variance = 1.25222270424
+	Training set: Accuracy = 0.86
+	Test set: Accuracy = 0.815789473684
+	\end{lstlisting}
+	\caption{Mean, variances and accuracies of normalized data sets}
+	\label{fig:lda_norm_results}
+\end{figure}
+
+% TODO: Describe why accuracy does not change after normalization
+As shown in figure~\ref{fig:lda_results} and figure~\ref{fig:lda_norm_results}, the accuracies have not changed after normalization of the dataset, because reasons. 
 
 \subsection{Bayes optimal classification and probabilistic classification}
 
