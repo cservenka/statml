@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[strict]{changepage} % Use to change pagedimensions
 
 \setlength{\parindent}{0pt}
 
@@ -72,9 +73,46 @@ E[1 \{ h(X) \neq Y \}] &= P(h(X) \neq Y) \\
 \end{align*}
 where we have used the fact that the pairs of events are disjoint (to get from line 2 to 3) and that the events in both pairs are independent (to get from line 3 to 4). We see that this probabilistic classifier has higher risk than the deterministic one that simply always returns 1.
 
-\section{ Regression: Sunspot Prediction}
+\section{Regression: Sunspot Prediction}
 
 \subsection{Maximum likelihood solution}
+Figure \ref{fig:selection2} shows the predicted number of sunspots for selection 2 of the training set and test set, respectively, along with the actual number of sunspots. Here, the values on the $x$-axis are the 1-dimensional data points in column 5 of the data set.
+
+\begin{figure}[H]
+  \begin{adjustwidth}{-7em}{-7em}
+    \centering
+    \includegraphics[width=.47\linewidth]{figures/training_set_selection2.png}
+    \includegraphics[width=.47\linewidth]{figures/test_set_selection2.png}
+  \end{adjustwidth}
+  \caption{Predicted and actual values for selection 2 of the training set and test set, plotted against the data points.}
+  \label{fig:selection2}
+\end{figure}
+
+When applying the models to the test set, we get the root mean square (RMS) errors shown in figure \ref{fig:rms_ml} below.
+
+\begin{figure}[H]
+	\begin{lstlisting}
+	RMS:
+        Selection 1: 41.007587122
+        Selection 2: 18.7442143723
+        Selection 3: 20.4087983523
+	\end{lstlisting}
+	\caption{Root mean square (RMS) errors with the ML parameter estimates.}
+	\label{fig:rms_ml}
+\end{figure}
+
+From the calculated RMS errors, selection 2 seems to give the best prediction. Figure \ref{fig:years_vs_sunspots} shows the predicted and actual values plotted agains year numbers for the years 1916-2011 of the test set. Since the points lie so close on the $x$-axis, it is hard to see exactly which predicted value goes with which actual value, making it hard to say anything from these plots.
+
+\begin{figure}[H]
+  \begin{adjustwidth}{-7em}{-7em}
+    \centering
+    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection1.png}
+    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection2.png}
+    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection3.png}
+  \end{adjustwidth}
+  \caption{Predicted and actual values, plotted against year numbers.}
+  \label{fig:years_vs_sunspots}
+\end{figure}
 
 \subsection{Maximum a posteriori solution}
 
