@@ -35,7 +35,7 @@ def getSigma(dataset, splitset):
 		for i in splitset[k]:
 			res_k += np.outer((i - mu_k), (i-mu_k).T) 
 		res += res_k
-	return (1 / (len(dataset) - m)) * res
+	return (1 / (l - m)) * res
 
 # Returns the prior_k
 def getPrior_k(splitset, dataset):
@@ -43,7 +43,7 @@ def getPrior_k(splitset, dataset):
 
 # Groups a dataset by its species
 def split(dataset, m):
-	res = [[] for x in xrange(m)]
+	res = [[] for _ in xrange(m)]
 	for elem in dataset:
 		res[int(elem[-1])].append(elem[:-1])
 	return np.array(res)

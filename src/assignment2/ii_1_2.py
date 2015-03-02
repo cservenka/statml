@@ -8,11 +8,11 @@ import numpy as np
 # Compute the maximum likelihood sample mean of
 # a given data set.
 def muML(dataset):
-	N = len(dataset)
-	n = 0
-	for x in dataset:
-		n += x
-	return (1/N) * n
+    N = len(dataset)
+    n = 0
+    for x in dataset:
+        n += x
+    return (1/N) * n
 
 # Compute the maximum likelihood sample covariance of
 # a given data set.

@@ -63,21 +63,37 @@ def plotPredictedAndActual(title, xs, ys, ts):
 
 # Compute the RMS error.
 def computeRMS(xs, w, ts):
-    return math.sqrt(sum([ts[i] - y(xs[i],w) for i in range(len(xs))]))
+    return math.sqrt(sum([(ts[i] - y(xs[i],w))**2 for i in range(len(xs))]))
 
+# Plot years vs. sunspots.
 def plotYearsVsSunspots(title, dataset, w, ts):
     startYear = 1916
+    
     # The year numbers in the dataset, assuming consecutive years
     # starting from startYear.
     xs = [startYear+i for (i,_) in enumerate(dataset)]
     ys = [y(x,w) for x in dataset]
+    
     # Plot the predicted and actual values.
-    plotPredictedAndActual(title, xs, ys, ts)
+    mpl.plot(xs, ys, 'ro', label="predicted")
+    mpl.plot(xs, ts, 'b^', label="actual")
+    
+    # Connect each predicted and actual value by a line.
+    for x1,y1,t1 in zip(xs, ys, ts):
+        mpl.plot([x1,x1],[y1,t1],'k-')
+    
+    mpl.title(title)
+    mpl.ylabel('y')
+    mpl.xlabel('x')
+    mpl.legend()
+    mpl.show()
 
 def run():
     # Read datasets.
-    train = readFile(os.path.dirname(__file__) + '/../../data/sunspotsTrainStatML.dt')
-    test = readFile(os.path.dirname(__file__) + '/../../data/sunspotsTestStatML.dt')
+    train = readFile(os.path.dirname(__file__) +
+                     '/../../data/sunspotsTrainStatML.dt')
+    test = readFile(os.path.dirname(__file__) +
+                    '/../../data/sunspotsTestStatML.dt')
     
     # Retrieve appropriate columns from the training set.
     train1 = sel1(train)
@@ -101,7 +117,8 @@ def run():
     ys_train_plot = [y(x,w2) for x in train2]
     
     # Plot the predicted and actual values for the training set.
-    plotPredictedAndActual('Training set, selection 2', xs_train_plot, ys_train_plot, ts_train)
+    plotPredictedAndActual('Training set, selection 2',
+                           xs_train_plot, ys_train_plot, ts_train)
     
     # Retrieve appropriate columns from the test set.
     test1 = sel1(test)
@@ -116,7 +133,8 @@ def run():
     
     # Plot the predicted and actual values for the test set in a new figure.
     mpl.figure()
-    plotPredictedAndActual('Test set, selection 2', xs_test_plot, ys_test_plot, ts_test)
+    plotPredictedAndActual('Test set, selection 2',
+                           xs_test_plot, ys_test_plot, ts_test)
     
     # Print the RMS errors.
     print 'RMS:'
@@ -128,9 +146,12 @@ def run():
     print 'Selection 3: ' + str(RMS3)
     
     # Plot years vs. sunspots.
-    plotYearsVsSunspots('Test set, selection 1, years vs. sunspots', test1, w1, ts_test)
-    plotYearsVsSunspots('Test set, selection 2, years vs. sunspots', test2, w2, ts_test)
-    plotYearsVsSunspots('Test set, selection 3, years vs. sunspots', test3, w3, ts_test)
+    plotYearsVsSunspots('Test set, selection 1, years vs. sunspots',
+                        test1, w1, ts_test)
+    plotYearsVsSunspots('Test set, selection 2, years vs. sunspots',
+                        test2, w2, ts_test)
+    plotYearsVsSunspots('Test set, selection 3, years vs. sunspots',
+                        test3, w3, ts_test)
 
 if __name__ == '__main__':
     run()

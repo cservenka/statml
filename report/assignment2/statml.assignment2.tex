@@ -76,7 +76,7 @@ where we have used the fact that the pairs of events are disjoint (to get from l
 \section{Regression: Sunspot Prediction}
 
 \subsection{Maximum likelihood solution}
-Figure \ref{fig:selection2} shows the predicted number of sunspots for selection 2 of the training set and test set, respectively, along with the actual number of sunspots. Here, the values on the $x$-axis are the 1-dimensional data points in column 5 of the data set.
+Figure \ref{fig:selection2} shows the predicted and actual number of sunspots for selection 2 of the training set and test set, respectively. Here, the values on the $x$-axis are the 1-dimensional data points in column 5 of the data set.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
@@ -92,25 +92,25 @@ When applying the models to the test set, we get the root mean square (RMS) erro
 
 \begin{figure}[H]
 	\begin{lstlisting}
-	RMS:
-        Selection 1: 41.007587122
-        Selection 2: 18.7442143723
-        Selection 3: 20.4087983523
+        RMS:
+        Selection 1: 347.485192924
+        Selection 2: 282.570860243
+        Selection 3: 183.907763145
 	\end{lstlisting}
-	\caption{Root mean square (RMS) errors with the ML parameter estimates.}
+	\caption{Root mean square (RMS) errors when using the ML parameter estimates.}
 	\label{fig:rms_ml}
 \end{figure}
 
-From the calculated RMS errors, selection 2 seems to give the best prediction. Figure \ref{fig:years_vs_sunspots} shows the predicted and actual values plotted agains year numbers for the years 1916-2011 of the test set. Since the points lie so close on the $x$-axis, it is hard to see exactly which predicted value goes with which actual value, making it hard to say anything from these plots.
+From the calculated RMS errors, selection 3 seems to give the best prediction, followed by selection 2 and then selection 1. Figure \ref{fig:years_vs_sunspots} shows the predicted and actual values plotted agains year numbers for the years 1916-2011 of the test set. We have connected each pair of predicted and actual value by a line, so the lines ``illustrate'' what the RMS error computes. Therefore, we expect that average length of the lines to be shortest for selection 2 and longest for selection 1. Although it is hard to tell the average line length from the plots, it looks like selection 3 has quite short lines.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
     \centering
-    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection1.png}
-    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection2.png}
-    \includegraphics[width=.3\linewidth]{figures/years_vs_sunspots_selection3.png}
+    \includegraphics[width=.32\linewidth]{figures/years_vs_sunspots_selection1.png}
+    \includegraphics[width=.32\linewidth]{figures/years_vs_sunspots_selection2.png}
+    \includegraphics[width=.32\linewidth]{figures/years_vs_sunspots_selection3.png}
   \end{adjustwidth}
-  \caption{Predicted and actual values, plotted against year numbers.}
+  \caption{Predicted and actual values plotted against year numbers, with lines connecting each predicted and actual value.}
   \label{fig:years_vs_sunspots}
 \end{figure}
 
