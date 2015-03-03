@@ -19,7 +19,7 @@ def get_w_MAP(phi, t, alpha):
     # Compute m_N from formula 3.50 in Bishop.
     m_N = np.dot(np.linalg.inv(S_N_inv),
                  (np.dot(np.linalg.inv(S_zero), m_zero) +
-                  np.dot(phi_matrix.T, t_vector)))
+                  np.dot(phi_matrix.T, t_vector)).T)
     return flatten(m_N.tolist())
 
 def computeAndPlotRMS(title, xs_train, xs_test, ts_train, ts_test):
