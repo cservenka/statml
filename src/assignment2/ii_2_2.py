@@ -1,4 +1,4 @@
-from ii_2_1 import readFile, sel1, sel2, sel3, selection, flatten, y, get_design_matrix, computeRMS
+from ii_2_1 import readFile, sel1, sel2, sel3, selection, get_w_ML, flatten, get_design_matrix, computeRMS
 import os.path
 import numpy as np
 import matplotlib.pyplot as mpl
@@ -12,32 +12,51 @@ def get_w_MAP(phi, t, alpha):
     # Prior variance matrix.
     S_zero = alpha * np.identity(M)
     # Create numpy versions of phi and t.
-    phi_matrix = np.matrix(phi)
+    phi_matrix = np.array(phi)
     t_vector = np.array(t)
     # Compute S_N_inv from fromula 3.51 in Bishop.
     S_N_inv = np.linalg.inv(S_zero) + np.dot(phi_matrix.T, phi_matrix)
     # Compute m_N from formula 3.50 in Bishop.
     m_N = np.dot(np.linalg.inv(S_N_inv),
                  (np.dot(np.linalg.inv(S_zero), m_zero) +
-                  np.dot(phi_matrix.T, t_vector)).T)
-    return flatten(m_N.tolist())
+                  np.dot(phi_matrix.T, t_vector)))
+    return m_N.tolist()
 
 def computeAndPlotRMS(title, xs_train, xs_test, ts_train, ts_test):
     # Compute the design matrix.
     phi = get_design_matrix(xs_train)
     
     # Try several different values for the prior precision parameter.
-    alphas = np.arange(0.5, 10, 0.5).tolist()
+    alphas = np.arange(0.25, 40, 0.25).tolist()
     
-    RMSs = []
+    # Compute the maximum likelihood estimate for comparison.
+    w_ML = get_w_ML(phi, ts_train)
+    RMS_ML = computeRMS(xs_test, w_ML, ts_test)
+    
+    RMSs_ML = []
+    RMSs_MAP = []
+    
     for alpha in alphas:
         # Compute the MAP estimate of w.
-        w = get_w_MAP(phi, ts_train, alpha)
+        w_MAP = get_w_MAP(phi, ts_train, alpha)
         # Compute the RMS error.
-        RMS = computeRMS(xs_test, w, ts_test)
-        RMSs.append(RMS)
+        RMS = computeRMS(xs_test, w_MAP, ts_test)
+        # Add RMS error for this value of alpha.
+        RMSs_MAP.append(RMS)
+        # The RMS error for the maximum likelihood estimate is always the
+        # same since it doesn't depend on alpha.
+        RMSs_ML.append(RMS_ML)
     
-    mpl.plot(alphas, RMSs, 'ro')
+    # Plot the RMS errors for the MAP estimate against the different
+    # alpha values.
+    mpl.plot(alphas, RMSs_MAP, 'ro', label='MAP RMS')
+    # Plot the RMS error for the ML estimate (constant line).
+    mpl.plot(alphas, RMSs_ML, 'b^', label='ML RMS')
+    mpl.title(title)
+    mpl.ylabel('y')
+    mpl.xlabel('x')
+    mpl.legend()
+    mpl.show()
 
 def run():
     # Read datasets.
