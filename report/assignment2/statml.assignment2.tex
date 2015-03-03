@@ -58,7 +58,7 @@ After normalization of the training and test dataset, the following accuracy res
 \end{figure}
 
 % TODO: Describe why accuracy does not change after normalization
-As shown in figure~\ref{fig:lda_results} and figure~\ref{fig:lda_norm_results}, the accuracies have not changed after normalization of the dataset, because reasons. 
+As shown in figure~\ref{fig:lda_results} and figure~\ref{fig:lda_norm_results}, the accuracies have not changed after normalization of the dataset. Figure 4.6 in the book may help explain why the normalization doesn't change the accuracy. In our LDA, we project our data onto a lower-dimensional hyperplane, and translating the data points (by the mean of the training set) doesn't change anything. Apparently, scaling down (by the variance of the training set) doesn't change anything either, and the reason might be that this scaling doesn't influence the positions of the points relative to each other.
 
 \subsection{Bayes optimal classification and probabilistic classification}
 Since the hypothesis of a classifier is a (deterministic) function, there are only two possibilities for selecting our classifier: Given the only input element $0$, the classifier must either always return $0$ or always return $1$. Clearly, the Bayes optimal classifier is the one that always returns $1$. Assuming 0-1 loss, the risk of this classifier is $E[1 \{ h(X) \neq Y \}] = P(h(X) \neq Y) = 0.25$.\\
