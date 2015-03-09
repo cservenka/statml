@@ -22,14 +22,11 @@ def get_w_MAP(phi, t, alpha):
                   np.dot(phi_matrix.T, t_vector)))
     return m_N.tolist()
 
-def computeAndPlotRMS(title, xs_train, xs_test, ts_train, ts_test):
+def computeAndPlotRMS(title, xs_train, xs_test, ts_train, ts_test, alphas):
     # Compute the design matrix.
     phi = get_design_matrix(xs_train)
     
-    # Try several different values for the prior precision parameter.
-    alphas = np.arange(-1.01, 1.01, 0.02).tolist()
-    
-    # Compute the maximum likelihood estimate for comparison.
+    # Compute the RMS error for the maximum likelihood estimate (for comparison).
     w_ML = get_w_ML(phi, ts_train)
     RMS_ML = computeRMS(xs_test, w_ML, ts_test)
     
@@ -53,8 +50,8 @@ def computeAndPlotRMS(title, xs_train, xs_test, ts_train, ts_test):
     # Plot the RMS error for the ML estimate (constant line).
     mpl.plot(alphas, RMSs_ML, 'b^', label='ML RMS')
     mpl.title(title)
-    mpl.ylabel('y')
-    mpl.xlabel('x')
+    mpl.ylabel('RMS')
+    mpl.xlabel('alpha')
     mpl.legend()
     mpl.show()
 
@@ -76,10 +73,25 @@ def run():
     test3 = sel3(test)
     ts_test = flatten(selection(test, 5, 5))
     
-    # Compute and plot the RMS errors.
-    computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test)
-    #computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test)
-    #computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test)
+    # Compute and plot the RMS errors for different values of alpha.
+    alphas1a = np.arange(-25.1, 11.1, 0.5).tolist()
+    computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1a)
+    alphas1b = np.arange(-21, -15, 0.08).tolist()
+    computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1b)
+    alphas1c = np.arange(-5.1, 5.1, 0.2).tolist()
+    computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1c)
+    alphas2a = np.arange(-20.1, 10.1, 0.2).tolist()
+    computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2a)
+    alphas2b = np.arange(-18, -12, 0.08).tolist()
+    computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2b)
+    alphas2c = np.arange(-5.1, 5.1, 0.2).tolist()
+    computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2c)
+    alphas3a = np.arange(-50, -23, 0.2).tolist()
+    computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3a)
+    alphas3b = np.arange(-21.1, 10.1, 0.2).tolist()
+    computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3b)
+    alphas3c = np.arange(-5.1, 5.1, 0.2).tolist()
+    computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3c)
     
 if __name__ == '__main__':
     run()

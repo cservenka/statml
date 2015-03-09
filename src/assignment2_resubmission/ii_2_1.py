@@ -56,7 +56,7 @@ def plotPredictedAndActual(title, xs, ys, ts):
     mpl.plot(xs, ys, 'ro', label="predicted")
     mpl.plot(xs, ts, 'b^', label="actual")
     mpl.title(title)
-    mpl.ylabel('y')
+    mpl.ylabel('sunspots')
     mpl.xlabel('x')
     mpl.legend()
     mpl.show()
@@ -83,8 +83,8 @@ def plotYearsVsSunspots(title, dataset, w, ts):
         mpl.plot([x1,x1],[y1,t1],'k-')
     
     mpl.title(title)
-    mpl.ylabel('y')
-    mpl.xlabel('x')
+    mpl.ylabel('sunspots')
+    mpl.xlabel('year')
     mpl.legend()
     mpl.show()
 
