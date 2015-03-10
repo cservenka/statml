@@ -104,7 +104,7 @@ When applying the models to the test set, we get the root mean square (RMS) erro
 	\label{fig:rms_ml}
 \end{figure}
 
-From the calculated RMS errors, selection 3 seems to give the best prediction, followed by selection 2 and then selection 1. Figure \ref{fig:years_vs_sunspots} shows the predicted and actual values plotted agains year numbers for the years 1916-2011 of the test set. We have connected each pair of predicted and actual value by a line, so the lines ``illustrate'' what the RMS error computes. Therefore, we expect that average length of the lines to be shortest for selection 2 and longest for selection 1. Although it is hard to tell the average line length from the plots, it looks like selection 3 has quite short lines.
+From the calculated RMS errors, selection 3 seems to give the best prediction, followed by selection 2 and then selection 1. Figure \ref{fig:years_vs_sunspots} shows the predicted and actual values plotted against year numbers for the years 1916-2011 of the test set. We have connected each pair of predicted and actual value by a line, so the lines ``illustrate'' what the RMS error computes. Therefore, we expect the average length of the lines to be shortest for selection 3 and longest for selection 1. Although it is hard to tell the average line length from the plots, it looks like selection 3 has quite short lines.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
@@ -194,7 +194,7 @@ For selection 3 the RMS error seems to behave a bit differently, as figure \ref{
 \end{figure}
 
 \subsection{Weighted sum-of-squares}
-We note that this new error function resembles very much our previous sum-of-squares error function, defined in (3.12) in the book --- we have only added the factor $r_n$ to the expression inside the sum. Thus, we can follow the method used in formulas (3.13) to (3.15) quite closely, only modifying the formulas a little bit. When taking the gradient of the log likelihood function, we get
+Given the new error function, we note that it resembles very much our previous sum-of-squares error function, defined in (3.12) in the book --- we have only added the factor $r_n$ to the expression inside the sum. Thus, we can follow the method used in formulas (3.13) to (3.15) quite closely, only modifying the formulas a little bit. When taking the gradient of the log likelihood function, we get
 
 \begin{align*} %\label{eq:gradient}
 \nabla \operatorname{ln} \, p(\bm{t} | w, \beta) = \beta \sum_{n=1}^{N} r_n \{ t_n - w^T \phi(x_n) \} \phi(x_n)^T
