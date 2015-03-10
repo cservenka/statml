@@ -118,24 +118,24 @@ From the calculated RMS errors, selection 3 seems to give the best prediction, f
 \end{figure}
 
 \subsection{Maximum a posteriori solution}
-Figure \ref{fig:alpha_vs_rms_selection1} shows the RMS errors for the maximum a posteriori estimates of $w$ for selection 1, plotted against different values of $\alpha$. For comparison we have also plotted the constant RMS error for the maximum likelihood estimate of $w$. In figure \ref{fig:alpha_vs_rms_selection1a} we let $\alpha$ range from $-25$ to $11$. It looks like the MAP RMS error goes below the ML RMS error for $\alpha$ between $-18$ and $0$, so in figure \ref{fig:alpha_vs_rms_selection1b} we have zoomed in around $\alpha = -18$, and in \ref{fig:alpha_vs_rms_selection1c} we have zoomed in around 0 (note that the model is undefined for $\alpha = 0$ since we use $\alpha^{-1}$).
+Figure \ref{fig:alpha_vs_rms_selection1} shows the RMS errors for the maximum a posteriori estimates of $w$ for selection 1, plotted against different values of $\alpha$. For comparison we have also plotted the constant RMS error for the maximum likelihood estimate of $w$. We let $\alpha$ range from around $0$ to $50$, $500$ and $50.000$, respectively, in the three subfigures. For $\alpha$ close to $0$, the MAP RMS error approaches the ML RMS error, but for increasing values of $\alpha$, the MAP RMS error seems to slowly increase, and the MAP RMS error doesn't seem to ever go below the ML RMS error (it does for negative values of $\alpha$, but it doesn't make any sense to talk about negative variance). When at $\alpha = 50.000$, the MAP RMS error is around $48$.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
     \centering
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection1a.png}
-      \caption{$\alpha$ between $-25$ and $11$.}
+      \caption{$\alpha$ ranges from $0$ to $50$.}
       \label{fig:alpha_vs_rms_selection1a}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection1b.png}
-      \caption{Zoomed in around $\alpha = -18$.}
+      \caption{$\alpha$ ranges from $0$ to $500$.}
       \label{fig:alpha_vs_rms_selection1b}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection1c.png}
-      \caption{Zoomed in around $\alpha = 0$.}
+      \caption{$\alpha$ ranges from $0$ to $50.000$.}
       \label{fig:alpha_vs_rms_selection1c}
     \end{subfigure}
   \end{adjustwidth}
@@ -143,24 +143,24 @@ Figure \ref{fig:alpha_vs_rms_selection1} shows the RMS errors for the maximum a 
   \label{fig:alpha_vs_rms_selection1}
 \end{figure}
 
-Figure \ref{fig:alpha_vs_rms_selection2} similarly shows the RMS errors for the maximum a posteriori estimates of $w$ for selection 2. Here, it looks like the MAP RMS error goes below the ML RMS error for $\alpha$ between $-15$ and $0$, so in figure \ref{fig:alpha_vs_rms_selection2b} we have zoomed in around $\alpha = -15$, and in \ref{fig:alpha_vs_rms_selection2c} we have zoomed in around 0 (still undefined for $\alpha = 0$).
+Figure \ref{fig:alpha_vs_rms_selection2} similarly shows the RMS errors for the maximum a posteriori estimates of $w$ for selection 2. Again, for $\alpha$ close to $0$, the MAP RMS error approaches the ML RMS error, but for increasing values of $\alpha$, the MAP RMS error seems to slowly increase and doesn't seem to ever go below the ML RMS error (except for negative values of $\alpha$). For $\alpha = 50.000$, the MAP RMS error is around $30$.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
     \centering
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection2a.png}
-      \caption{$\alpha$ between $-20$ and $10$.}
+      \caption{$\alpha$ ranges from $0$ to $50$.}
       \label{fig:alpha_vs_rms_selection2a}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection2b.png}
-      \caption{Zoomed in around $\alpha = -15$.}
+      \caption{$\alpha$ ranges from $0$ to $500$.}
       \label{fig:alpha_vs_rms_selection2b}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection2c.png}
-      \caption{Zoomed in around $\alpha = 0$.}
+      \caption{$\alpha$ ranges from $0$ to $50.000$.}
       \label{fig:alpha_vs_rms_selection2c}
     \end{subfigure}
   \end{adjustwidth}
@@ -168,30 +168,32 @@ Figure \ref{fig:alpha_vs_rms_selection2} similarly shows the RMS errors for the 
   \label{fig:alpha_vs_rms_selection2}
 \end{figure}
 
-For selection 3 the RMS error seems to behave a bit differently, as figure \ref{fig:alpha_vs_rms_selection3} shows. Here, the MAP RMS error doesn't seem to go below the ML RMS error for numerically large negative values of $\alpha$. For $\alpha = -22$ the RMS error seems to skyrocket, so in figure \ref{fig:alpha_vs_rms_selection3a} we let $\alpha$ range from $-50$ to $-23$, and in figure \ref{fig:alpha_vs_rms_selection3b} we let $\alpha$ range from $-21$ to $10$. It is hard to tell from figure \ref{fig:alpha_vs_rms_selection3b} that lines actually cross, so in figure \ref{fig:alpha_vs_rms_selection3c} we have zoomed in around $\alpha = 0$.
+For selection 3 the RMS error seems to behave a bit differently, as figure \ref{fig:alpha_vs_rms_selection3} shows. Here, the MAP RMS error stays below the ML RMS error quite long and then finally goes above for very large $\alpha$. At its lowest, the MAP RMS error is close to $18.5$, and at $\alpha = 50.000$ the MAP RMS error is just above $21.5$.
 
 \begin{figure}[H]
   \begin{adjustwidth}{-7em}{-7em}
     \centering
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection3a.png}
-      \caption{$\alpha$ between $-50$ and $-23$.}
+      \caption{$\alpha$ ranges from $0$ to $50$.}
       \label{fig:alpha_vs_rms_selection3a}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection3b.png}
-      \caption{$\alpha$ between $-21$ and $10$.}
+      \caption{$\alpha$ ranges from $0$ to $500$.}
       \label{fig:alpha_vs_rms_selection3b}
     \end{subfigure}
     \begin{subfigure}{.32\linewidth}
       \includegraphics[width=\linewidth]{figures/alpha_vs_rms_selection3c.png}
-      \caption{Zoomed in around $\alpha = 0$.}
+      \caption{$\alpha$ ranges from $0$ to $50.000$.}
       \label{fig:alpha_vs_rms_selection3c}
     \end{subfigure}
   \end{adjustwidth}
   \caption{RMS errors for the MAP estimate for selection 3 plotted against different values of $\alpha$ together with the constant RMS error for the ML estimate.}
   \label{fig:alpha_vs_rms_selection3}
 \end{figure}
+
+We haven't been able to explain why the RMS error for selection 3 differs from the other two selection, but from these figures, it looks like selection 3 still provides the best prediction.
 
 \subsection{Weighted sum-of-squares}
 Given the new error function, we note that it resembles very much our previous sum-of-squares error function, defined in (3.12) in the book --- we have only added the factor $r_n$ to the expression inside the sum. Thus, we can follow the method used in formulas (3.13) to (3.15) quite closely, only modifying the formulas a little bit. When taking the gradient of the log likelihood function, we get
@@ -218,11 +220,11 @@ By fiddling with the sums and the corresponding matrices we see that this can be
 w^T \left( \Phi^T \mathrm{R} \Phi \right) = \bm{t}^T \mathrm{R} \Phi
 \end{align*}
 
-where we have defined $R$ to be the diagonal matrix with the weights $r_1, \dots, r_n$ on the diagonal:
+where we have defined $\mathrm{R}$ to be the diagonal matrix with the weights $r_1, \dots, r_n$ on the diagonal:
 
 \begin{align*} %\label{eq:R}
 \setlength\unitlength{13pt}
-R =
+\mathrm{R} =
 \left(\begin{picture}(6,3)(0,-3)
 \put(1,-1){\makebox(0,0){$r_1$}}
 \put(2,-2){\makebox(0,0){$r_2$}}

@@ -74,23 +74,25 @@ def run():
     ts_test = flatten(selection(test, 5, 5))
     
     # Compute and plot the RMS errors for different values of alpha.
-    alphas1a = np.arange(-25.1, 11.1, 0.5).tolist()
+    alphas1a = np.arange(-0.1, 50.1, 0.2).tolist()
     computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1a)
-    alphas1b = np.arange(-21, -15, 0.08).tolist()
+    alphas1b = np.arange(-0.1, 500.1, 1).tolist()
     computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1b)
-    alphas1c = np.arange(-5.1, 5.1, 0.2).tolist()
+    alphas1c = np.arange(-0.1, 50000.1, 100).tolist()
     computeAndPlotRMS('Selection 1', train1, test1, ts_train, ts_test, alphas1c)
-    alphas2a = np.arange(-20.1, 10.1, 0.2).tolist()
+    
+    alphas2a = np.arange(-0.1, 50.1, 0.2).tolist()
     computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2a)
-    alphas2b = np.arange(-18, -12, 0.08).tolist()
+    alphas2b = np.arange(-0.1, 500.1, 1).tolist()
     computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2b)
-    alphas2c = np.arange(-5.1, 5.1, 0.2).tolist()
+    alphas2c = np.arange(-0.1, 50000.1, 100).tolist()
     computeAndPlotRMS('Selection 2', train2, test2, ts_train, ts_test, alphas2c)
-    alphas3a = np.arange(-50, -23, 0.2).tolist()
+    
+    alphas3a = np.arange(-0.1, 50.1, 0.2).tolist()
     computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3a)
-    alphas3b = np.arange(-21.1, 10.1, 0.2).tolist()
+    alphas3b = np.arange(-0.1, 500.1, 1).tolist()
     computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3b)
-    alphas3c = np.arange(-5.1, 5.1, 0.2).tolist()
+    alphas3c = np.arange(-0.1, 50000.1, 100).tolist()
     computeAndPlotRMS('Selection 3', train3, test3, ts_train, ts_test, alphas3c)
     
 if __name__ == '__main__':
