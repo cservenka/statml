@@ -1,12 +1,17 @@
+from __future__ import division
+
 import random
 import math
 import os
 
 class Neuron:
+	"""Models a single neuron in the neural network"""
+	
 	def __init__(self, transfer_function):
 		self.transfer_function = transfer_function
 		self.inputs = []
 
+    #Adds a node to the input list with a given weight
 	def add_input(self, weight, neuron):
 		self.inputs.append((weight, neuron))
 
@@ -16,6 +21,9 @@ class Neuron:
 	def set_inputs(self, inputs):
 		self.inputs = inputs
 
+    #This function polls the neurons input for data in a recursive manner
+    #To run the whole network simply call this method on one of the output neurons, the call will then propagate backwards
+    #If this neuron is an input neuron, it should have an empty list of inputs so the result will just be transfer_function(0)
 	def run(self):
 		s = 0
 		for (w, n) in self.inputs:
@@ -26,24 +34,36 @@ class Neuron:
 		return "Neuron\tInputs: %d\n" % len(self.inputs)
 
 class NeuralNetwork:
+	"""Models a multi-layer neural network"""
+
+	#Transfer function for input nodes, a will always be 0 but we ignore it and simply return the data of the current pattern
 	def input_function(self, a):
 		return self.data[self.index][0]
 
+	#Transfer function for hidden nodes - sigmoidal
 	def hidden_function(self, a):
 		return (1 / (1 + math.fabs(a)))
 
+	#Transfer function for output nodes - identity function
 	def output_function(self, a):
 		return a
 
+	#Transfer function for bias nodes, again a will always be 0 but we ignore it and return our bias parameter instead
 	def bias_function(self, a):
 		return 1.0
 
+	#Load the given dataset
 	def load(self, filename):
 		self.data = [map(float, line.strip().split(' ')) for line in open(filename)]
+		self.N = len(self.data)
 
+	#Initialise the network with the given dataset
+	#D is the number of input nodes (should always be 1)
+	#M is the number of hidden nodes
+	#K is the number of output nodes (should always be 1)
+	#Bias nodes are automatically added
 	def __init__(self, filename, D, M, K):
 		self.load(filename)
-		self.index = 0
 		self.input_neurons = [Neuron(self.input_function) for _ in xrange(D)]
 		self.hidden_neurons = [Neuron(self.hidden_function) for _ in xrange(M)]
 		self.output_neurons = [Neuron(self.output_function) for _ in xrange(K)]
@@ -60,12 +80,20 @@ class NeuralNetwork:
 		for o_n in self.output_neurons:
 			o_n.set_inputs([(random.uniform(-1.0, 1.0), n) for n in self.hidden_neurons])
 
+	#Run the network on the i'th data point
 	def run(self, i):
 		self.index = i
 		result = []
 		for o_n in self.output_neurons:
 			result.append(o_n.run())
 		return result
+
+	#Run the network on the i'th data point and get the error value
+	# ********* Probably not correct ***********
+	def get_error(self, i):
+		y_i = self.run(i)[0]
+		t_i = self.data[i][1]
+		return (1 / self.N) * (y_i - t_i) ** 2
 
 	def __str__(self):
 		output = "Input neurons: \n\t" + "\t".join(map(str, self.input_neurons))
@@ -75,5 +103,4 @@ class NeuralNetwork:
 
 if __name__ == '__main__':
 	nn = NeuralNetwork(os.path.dirname(__file__) + '/../../data/sincTrain25.dt', 1, 10, 1)
-	print nn
-	print nn.run(2)
+	print nn.get_error(0)
