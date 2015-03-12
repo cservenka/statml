@@ -64,6 +64,9 @@ class NeuralNetwork:
 	#Bias nodes are automatically added
 	def __init__(self, filename, D, M, K):
 		self.load(filename)
+		self.D = D
+		self.M = M
+		self.K = K
 		self.input_neurons = [Neuron(self.input_function) for _ in xrange(D)]
 		self.hidden_neurons = [Neuron(self.hidden_function) for _ in xrange(M)]
 		self.output_neurons = [Neuron(self.output_function) for _ in xrange(K)]
@@ -91,9 +94,13 @@ class NeuralNetwork:
 	#Run the network on the i'th data point and get the error value
 	# ********* Probably not correct ***********
 	def get_error(self, i):
-		y_i = self.run(i)[0]
-		t_i = self.data[i][1]
-		return (1 / self.N) * (y_i - t_i) ** 2
+		result = self.run(i)
+		error = 0
+		for k in xrange(self.K):
+			y_i = result[k]
+			t_i = self.data[i][1]
+			error += (1 / self.N) * (y_i - t_i) ** 2
+		return error
 
 	def __str__(self):
 		output = "Input neurons: \n\t" + "\t".join(map(str, self.input_neurons))
