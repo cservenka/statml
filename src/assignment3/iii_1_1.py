@@ -93,7 +93,7 @@ class NeuralNetwork:
 
 	#Run the network on the i'th data point and get the error value
 	# ********* Probably not correct ***********
-	def get_error(self, i):
+	def get_error_n(self, i):
 		result = self.run(i)
 		error = 0
 		for k in xrange(self.K):
@@ -110,4 +110,4 @@ class NeuralNetwork:
 
 if __name__ == '__main__':
 	nn = NeuralNetwork(os.path.dirname(__file__) + '/../../data/sincTrain25.dt', 1, 10, 1)
-	print nn.get_error(0)
+	print nn.get_error_n(0)
