@@ -3,7 +3,7 @@ from __future__ import division
 import os
 import numpy as np
 
-# Reads a datafile containing 
+# Reads a datafile containing 22 features and a label on each line
 def readFile(filename):
     lines = [line.strip().split(' ') for line in open(filename)]
     lines_rotated = np.rot90(lines, 3)
