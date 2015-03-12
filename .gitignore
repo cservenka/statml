@@ -7,3 +7,9 @@
 *.pdf
 *.gz
 *.toc
+*.DS_Store
+.DS_Store
+*.bbl
+*.blg
+*.dvi
+*.ps
