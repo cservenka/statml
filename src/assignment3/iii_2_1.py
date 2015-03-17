@@ -38,7 +38,7 @@ def normalizeList(lst, mean, variance):
 # Transpose a list of lists.
 def transpose(data):
     # Temporarily use a numpy matrix.
-    return np.array(data).T.tolist()
+    return map(list, zip(*data))
 
 # Normalize a data set using the given set of parameters (mean and variance).
 def normalizeDataset(dataset, parameters):
@@ -54,7 +54,7 @@ def normalizeDataset(dataset, parameters):
         normalizedDataset.append(normalizeList(transposedDataset[i],
                                                currentParameters[0],  # mean
                                                currentParameters[1])) # variance
-    normalizedDataset.append(transposedDataset[2]) # list of classes
+    normalizedDataset.append(transposedDataset[22]) # list of classes
     
     # Transpose back to original form.
     return transpose(normalizedDataset)
