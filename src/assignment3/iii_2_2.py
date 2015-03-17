@@ -48,10 +48,28 @@ def hyperparameterSelection(data):
 
 	return min(results, key = operator.itemgetter(0))
 
-train = readFile(os.path.dirname(__file__) + '/../../data/parkinsonsTrainStatML.dt')
-test = readFile(os.path.dirname(__file__) + '/../../data/parkinsonsTestStatML.dt')
-#(loss, (C, gamma)) = hyperparameterSelection(train)
-(training_loss, parameters) = hyperparameterSelection(normalize(train))
+def run():
+    train = readFile(os.path.dirname(__file__) + '/../../data/parkinsonsTrainStatML.dt')
+    test = readFile(os.path.dirname(__file__) + '/../../data/parkinsonsTestStatML.dt')
 
-test_loss = getLoss(parameters, normalize(test), normalize(train))
-print parameters
+    normalized_train = normalize(train)
+    normalized_test  = normalize(test)
+
+    (train_loss, train_params) = hyperparameterSelection(train)
+    (normalized_train_loss, normalized_train_params) = hyperparameterSelection(normalized_train)
+    
+    train_accuracy = 1 - train_loss
+    test_accuracy  = 1 - getLoss(train_params, test, train)
+    normalized_train_accuracy = 1 - normalized_train_loss
+    normalized_test_accuracy  = 1 - getLoss(normalized_train_params, normalized_test, normalized_train)
+
+    print "Training set: Hyperparameter config = (%s, %s)" % (train_params[0], train_params[1])
+    print "Training set: Accuracy = %s" % train_accuracy
+    print "Test set: Accuracy = %s" % test_accuracy
+
+    print "Normalized Training set: Hyperparameter config = (%s, %s)" % (normalized_train_params[0], normalized_train_params[1])   
+    print "Normalized Training set: Accuracy = %s" % normalized_train_accuracy
+    print "normalized Test set: Accuracy = %s" % normalized_test_accuracy
+    
+if __name__ == '__main__':
+    run()
