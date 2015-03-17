@@ -54,3 +54,4 @@ test = readFile(os.path.dirname(__file__) + '/../../data/parkinsonsTestStatML.dt
 (training_loss, parameters) = hyperparameterSelection(normalize(train))
 
 test_loss = getLoss(parameters, normalize(test), normalize(train))
+print parameters
