@@ -25,17 +25,19 @@ class Neuron:
 class InputNeuron(Neuron):
 	"""An input neuron in the neural network"""
 	
-	def __init__(self, network, get_data_function, input_data, i):
+	def __init__(self, network, get_data_function, i):
 		Neuron.__init__(self, network)
 		# Input neurons use a function that simply fetches data.
 		self.get_data_function = get_data_function
-		# Keep a copy of the input data.
-		self.input_data = input_data
 		# The number of this input neuron.
 		self.i = i
 	
 	def __str__(self):
 		return "InputNeuron%d" % self.i
+	
+	def setInputData(self, input_data):
+		# Keep a copy of the input data.
+		self.input_data = input_data
 	
 	# Read the input data and set it as the output of this neuron.
 	def computeOutputValue(self, n):
@@ -92,17 +94,15 @@ class HiddenNeuron(Neuron):
 		# Use delta to compute derivatives.
 		for i_n in self.inputs:
 			delta_E_n = current_delta * i_n.current_output_value
-			self.network.E[(i_n, self)] += delta_E_n
+			self.network.dE[(i_n, self)] += delta_E_n
 
 class OutputNeuron(Neuron):
 	"""An output neuron in the neural network"""
 	
-	def __init__(self, network, activation_function, target_data, k):
+	def __init__(self, network, activation_function, k):
 		Neuron.__init__(self, network)
 		# Activation function of this output neuron (identity function).
 		self.activation_function = activation_function
-		# Keep a copy of the target values (to compute the delta).
-		self.target_data = target_data
 		# The number of this input neuron.
 		self.k = k
 		# Store the delta so that it can be used in back-propagation.
@@ -110,6 +110,10 @@ class OutputNeuron(Neuron):
 	
 	def __str__(self):
 		return "OutputNeuron%d" % self.k
+	
+	def setTargetData(self, target_data):
+		# Keep a copy of the target values (to compute the delta).
+		self.target_data = target_data
 	
 	# Compute the activation (i.e., output value) of this output neuron.
 	def computeOutputValue(self):
@@ -131,7 +135,7 @@ class OutputNeuron(Neuron):
 		# Use delta to compute derivatives.
 		for h_n in self.inputs:
 			delta_E_n = self.current_delta * h_n.current_output_value
-			self.network.E[(h_n, self)] += delta_E_n
+			self.network.dE[(h_n, self)] += delta_E_n
 
 class NeuralNetwork:
 	"""Models a multi-layer neural network"""
@@ -147,29 +151,22 @@ class NeuralNetwork:
 	# M is the number of hidden nodes.
 	# K is the number of output nodes (should always be 1).
 	# Bias nodes are automatically added.
-	def __init__(self, filename, D, M, K):
-		# Load data.
-		self.load(filename)
-		
+	def __init__(self, D, M, K):
 		# Set the dimensions.
 		self.D = D
 		self.M = M
 		self.K = K
 		
-		# Extract the first D columns of the data.
-		input_data = transposeList(transposeList(self.data)[:self.D])
 		# Create D input neurons (plus one bias).
-		bias_input = InputNeuron(self, inputBiasFunction, [], 0)
-		self.input_neurons = [bias_input] + [InputNeuron(self, inputFunction, input_data, i+1) for i in range(D)]
+		bias_input = InputNeuron(self, inputBiasFunction, 0)
+		self.input_neurons = [bias_input] + [InputNeuron(self, inputFunction, i+1) for i in range(D)]
 		
 		# Create M hidden neurons (plus one bias).
 		bias_hidden = HiddenNeuron(self, hiddenBiasFunction, hiddenBiasFunctionDeriv, 0)
 		self.hidden_neurons = [bias_hidden] + [HiddenNeuron(self, hiddenFunction, hiddenFunctionDeriv, j+1) for j in range(M)]
 		
-		# Extract the last K columns of the data.
-		target_data = transposeList(transposeList(self.data)[self.K:])
 		# Create K output neurons.
-		self.output_neurons = [OutputNeuron(self, outputFunction, target_data, k+1) for k in range(K)]
+		self.output_neurons = [OutputNeuron(self, outputFunction, k+1) for k in range(K)]
 		
 		# The weights of the network, using a dictionary that maps pairs of
 		# neurons to weights.
@@ -201,12 +198,22 @@ class NeuralNetwork:
 		
 		# The partial derivatives of the network, using a dictionary that maps
 		# pairs of neurons to partial derivatives.
-		self.E = collections.OrderedDict()
+		self.dE = collections.OrderedDict()
 	
 	# Load the given dataset.
-	def load(self, filename):
-		self.data = [map(float, line.strip().split(' ')) for line in open(filename)]
+	def load(self, dataset):
+		self.data = dataset
 		self.N = len(self.data)
+		
+		# Extract the first D columns of the data.
+		input_data = transposeList(transposeList(self.data)[:self.D])
+		for i_n in self.input_neurons:
+			i_n.setInputData(input_data)
+		
+		# Extract the last K columns of the data.
+		target_data = transposeList(transposeList(self.data)[self.K:])
+		for o_n in self.output_neurons:
+			o_n.setTargetData(target_data)
 	
 	# Run the network on the loaded dataset.
 	def runNetwork(self):
@@ -217,18 +224,24 @@ class NeuralNetwork:
 		# Initialise the partial derivatives to zero. Each iteration adds to
 		# the derivatives.
 		for k in self.w.iterkeys():
-			self.E[k] = 0.0
+			self.dE[k] = 0.0
+		
+		self.outputs = []
 		
 		# Iterate over the input patterns.
 		for n in range(self.N):
 			# Run the network on each input pattern.
 			self.runSingleData(n)
 			
-			# Compute the squared error.
+			outputs_n = []
+			
+			# Compute the error and output.
 			deltas = []
 			for o_n in self.output_neurons:
+				outputs_n.append(o_n.current_output_value)
 				deltas.append(o_n.current_delta)
 			self.error += np.linalg.norm(np.array(deltas)) ** 2
+			self.outputs.append(outputs_n)
 		
 		# Since we added the squared error in each iteration, we need to divide
 		# by N to get the mean-squared error.
@@ -237,31 +250,12 @@ class NeuralNetwork:
 		# Since each iteration added to the derivatives, divide by N to
 		# compute the mean. We also multiply by 2 since each term that we take
 		# derivatives over should be a squared term.
-		for k in self.E.iterkeys():
-			self.E[k] *= 2.0 / self.N
-		
-# 		# Aggregate (i.e., calculate the mean) the gradients for the N patterns.
-# 		for k in self.E[0].iterkeys():
-# 			self.E_aggr[k] = 0
-# 		for n in range(self.N):
-# 			for k,v in self.E[n].iteritems():
-# 				self.E_aggr[k] += v
-# 		for k,v in self.E_aggr.iteritems():
-# 			self.E_aggr[k] /= self.N
-		
-# 		print "E:"
-# 		for (n1,n2),v in self.E.iteritems():
-# 			print "(" + str(n1) + ", " + str(n2) + "): " + str(v)
-# 		
-# 		print "w:"
-# 		for (n1,n2),v in self.w.iteritems():
-# 			print "(" + str(n1) + ", " + str(n2) + "): " + str(v)
-# 		
-# 		print "error = %0.2f" % self.error
-	
+		for k in self.dE.iterkeys():
+			self.dE[k] *= 2.0 / self.N
+
 	# Run the network on the n'th input pattern.
 	def runSingleData(self, n):
-# 		# Do forward-propagation and back-propagation.
+		# Do forward-propagation and back-propagation.
 		self.forwardPropagate(n)
 		self.backPropagate(n)
 	
@@ -345,7 +339,14 @@ def outputFunction(a):
 def transposeList(lst):
 	return (np.array(lst).T).tolist()
 
+# Load the given dataset.
+def readFile(filename):
+	return [map(float, line.strip().split(' ')) for line in open(filename)]
+
 def run():
+	train = readFile(os.path.dirname(__file__) + '/../../data/sincTrain25.dt')
+	#test = readFile(os.path.dirname(__file__) + '/../../data/sincValidate10.dt')
+	
 	# One-dimensional inputs.
 	D = 1
 	# Some number of hidden neurons
@@ -353,10 +354,12 @@ def run():
 	# One-dimensional output.
 	K = 1
 	# Create neural network.
-	nn = NeuralNetwork(os.path.dirname(__file__) + '/../../data/sincTrain25.dt', D, M, K)
+	nn = NeuralNetwork(D, M, K)
+	# Load data.
+	nn.load(train)
 	# Run the network to produce the partial derivatives.
 	nn.runNetwork()
-	derivatives = nn.E
+	derivatives = nn.dE
 	# Numerically estimate the partial derivatives.
 	estimates = nn.computeNumericalEstimates()
 	print "Partial derivatives"
