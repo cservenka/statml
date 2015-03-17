@@ -171,7 +171,8 @@ class NeuralNetwork:
 		# Create K output neurons.
 		self.output_neurons = [OutputNeuron(self, outputFunction, target_data, k+1) for k in range(K)]
 		
-		# The weights of this network.
+		# The weights of the network, using a dictionary that maps pairs of
+		# neurons to weights.
 		self.w = collections.OrderedDict()
 		
 		# Set up connections from input neurons to hidden neurons.
@@ -198,7 +199,8 @@ class NeuralNetwork:
 				# back-propagate deltas).
 				h_n.addOutput(o_n)
 		
-		# E is a dictionary that maps pairs of neurons to partial derivatives.
+		# The partial derivatives of the network, using a dictionary that maps
+		# pairs of neurons to partial derivatives.
 		self.E = collections.OrderedDict()
 	
 	# Load the given dataset.
@@ -206,6 +208,7 @@ class NeuralNetwork:
 		self.data = [map(float, line.strip().split(' ')) for line in open(filename)]
 		self.N = len(self.data)
 	
+	# Run the network on the loaded dataset.
 	def runNetwork(self):
 		
 		# Initialise error to zero.
@@ -216,25 +219,26 @@ class NeuralNetwork:
 		for k in self.w.iterkeys():
 			self.E[k] = 0.0
 		
+		# Iterate over the input patterns.
 		for n in range(self.N):
 			# Run the network on each input pattern.
 			self.runSingleData(n)
 			
-			# Group the deltas for 1..K in a vector.
+			# Compute the squared error.
 			deltas = []
 			for o_n in self.output_neurons:
 				deltas.append(o_n.current_delta)
-			# Compute the squared error.
 			self.error += np.linalg.norm(np.array(deltas)) ** 2
 		
-		# Since each iteration added to the derivatives, divide by N to
-		# compute the mean.
-		for k in self.E.iterkeys():
-			self.E[k] /= self.N
+		# Since we added the squared error in each iteration, we need to divide
+		# by N to get the mean-squared error.
+		self.error *= 1.0 / self.N
 		
-		# Since we added a squared term in each iteration, we need to divide
-		# by N to get the mean squared error.
-		self.error /= 2.0 * self.N
+		# Since each iteration added to the derivatives, divide by N to
+		# compute the mean. We also multiply by 2 since each term that we take
+		# derivatives over should be a squared term.
+		for k in self.E.iterkeys():
+			self.E[k] *= 2.0 / self.N
 		
 # 		# Aggregate (i.e., calculate the mean) the gradients for the N patterns.
 # 		for k in self.E[0].iterkeys():
@@ -262,7 +266,7 @@ class NeuralNetwork:
 		self.backPropagate(n)
 	
 	# Forward-propagate the inputs (and activations). Each layer computes its
-	# output values so that it can be used as input to the next layer.
+	# output values so that the values can be used as inputs to the next layer.
 	def forwardPropagate(self, n):
 		for i_n in self.input_neurons:
 			i_n.computeOutputValue(n)
@@ -355,7 +359,7 @@ def run():
 	derivatives = nn.E
 	# Numerically estimate the partial derivatives.
 	estimates = nn.computeNumericalEstimates()
-	print "Partial derivatives, computed with backpropagation and numerical estimation."
+	print "Partial derivatives"
 	for (n1,n2) in derivatives.iterkeys():
 		print "(" + str(n1) + ", " + str(n2) + "):"
 		print "\t" + str(derivatives[(n1,n2)])
