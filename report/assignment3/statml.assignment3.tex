@@ -218,8 +218,11 @@ As seen in ~\ref{fig:grid_search_results}, the normalized data sets resulted in 
 \subsection{Inspecting the kernel expansion}
 
 \subsubsection{Support vectors}
-% For discussion of different C choices see http://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel
+
+The value of $C$ affects the missclassification rate of the training examples. For small values of C a large-margin hyperplane will be used regardless of the missclassification rate. For larger values of C, the SVM will pick a smaller-margin hyperplane provided it minimizes the missclassification rate. 
 
 \subsubsection{Scaling behaviour}
+
+Training an SVM takes quadratic time with respect to the number of training examples or even cubic time in the worst case scenario. For very large training sets the time it takes to train the SVM will be impractical. The number of support vectors used will be determined by how large the Bayes risk is for the given problem - with a very large risk the number of support vectors might follow the number of training examples closely.
 
 \end{document}
