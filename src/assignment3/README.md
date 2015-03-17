@@ -1,6 +1,6 @@
 The code for this handin has only been tested with Python v. 2.7.x - it will likely not work with Python 3.
 
-The code numpy for various vector/matrix operations and sci-kit learn for SVM computations.
+The code uses matplotlib for rendering graphs and plots, numpy for various vector/matrix operations and sci-kit learn for SVM computations.
 
 Both of these libraries have dependencies of their own but are easily installed using pip or similar.
 
