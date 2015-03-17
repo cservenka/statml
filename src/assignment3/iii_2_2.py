@@ -10,6 +10,8 @@ def splitList(lst, n):
 	n = max(1, n)
 	return [lst[i:i + n] for i in range(0, len(lst), n)]
 
+# Train an SVM with the given parameters and training set
+# Then run that SVM with the given test data and calculate the mean 0-1 loss
 def getLoss(parameters, test, train):
 	(C, gamma) = parameters
 	classifier = svm.SVC(C = C, kernel = 'rbf')
@@ -27,6 +29,7 @@ def getLoss(parameters, test, train):
 	loss = lambda (p, r): 0 if p == r else 1
 	return np.mean(map(loss, zip(result_test, result_classifier)))
 
+# Perform n-fold cross validation with the given data set and parameters
 def nFoldCrossValidation(n, data, parameters):
 	accuracy = []
 	groups = splitList(data, len(data) / n)
@@ -36,16 +39,21 @@ def nFoldCrossValidation(n, data, parameters):
 		accuracy.append(getLoss(parameters, skip, rest))
 	return np.mean(accuracy)
 
+# Use grid-search and cross validation to find the best values for C and gamma
 def hyperparameterSelection(data):
 	C_range = [0.1, 1, 10, 100, 1000]
 	gamma_range = [0.001, 0.01, 0.1, 1, 10]
+
+    # Cartesian product
 	hyperparameter_grid = [pair for pair in itertools.product(C_range, gamma_range)]
 
 	results = []
 	for parameters in hyperparameter_grid:
+        # n = 5 per assignment handout
 		result = nFoldCrossValidation(5, data, parameters)
 		results.append((result, parameters))
 
+    # Find the combination of parameters which yielded the lowest 0-1 loss
 	return min(results, key = operator.itemgetter(0))
 
 def run():
