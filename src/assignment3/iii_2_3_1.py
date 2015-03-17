@@ -22,3 +22,10 @@ n_free = len(coef) - n_bound
 print "bounded: %d \t free: %d" % (n_bound, n_free)
 
 
+def run():
+	print "Hello, world"
+
+if __name__ == '__main__':
+    run()
+
+
