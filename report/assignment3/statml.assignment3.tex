@@ -9,6 +9,7 @@
 \usepackage{dsfont}
 \usepackage{lmodern}
 \usepackage{listings}
+\usepackage{hyperref}
 \lstset{
   basicstyle = \footnotesize
 }
@@ -135,12 +136,89 @@ Figure \ref{fig:partial_derivatives} compares the derivatives found using back-p
 \section{Support Vector Machines}
 
 \subsection{Data normalization}
+After normalization of the training and test data sets, the following means and variances were computed for each feature of the sets
+\begin{figure}[H]
+	\begin{lstlisting}
+	Training set, feature = 0: Mean = 8.50793358667e-16, variance = 1.0
+	Training set, feature = 1: Mean = -6.29881634379e-16, variance = 1.0
+	Training set, feature = 2: Mean = 3.85179416707e-17, variance = 1.0
+	Training set, feature = 3: Mean = 3.21738101014e-16, variance = 1.0
+	Training set, feature = 4: Mean = -1.05641119435e-15, variance = 1.0
+	Training set, feature = 5: Mean = -1.20085347561e-16, variance = 1.0
+	Training set, feature = 6: Mean = 4.74676987059e-16, variance = 1.0
+	Training set, feature = 7: Mean = 2.29974769387e-16, variance = 1.0
+	Training set, feature = 8: Mean = 1.48860515751e-15, variance = 1.0
+	Training set, feature = 9: Mean = -7.8055475915e-16, variance = 1.0
+	Training set, feature = 10: Mean = 1.23597277537e-15, variance = 1.0
+	Training set, feature = 11: Mean = -1.93722588991e-16, variance = 1.0
+	Training set, feature = 12: Mean = 8.93842822887e-16, variance = 1.0
+	Training set, feature = 13: Mean = -1.45008721584e-16, variance = 1.0
+	Training set, feature = 14: Mean = 1.40477199034e-16, variance = 1.0
+	Training set, feature = 15: Mean = -1.44442281265e-15, variance = 1.0
+	Training set, feature = 16: Mean = 1.19179043052e-15, variance = 1.0
+	Training set, feature = 17: Mean = 3.16158663875e-15, variance = 1.0
+	Training set, feature = 18: Mean = -2.44305709449e-15, variance = 1.0
+	Training set, feature = 19: Mean = 7.43169698116e-16, variance = 1.0
+	Training set, feature = 20: Mean = -1.43705908851e-15, variance = 1.0
+	Training set, feature = 21: Mean = -1.04225018638e-16, variance = 1.0
+	Test set, feature = 0: Mean = -0.0785793098786, variance = 0.732185076092
+	Test set, feature = 1: Mean = -0.158041615121, variance = 0.714913359501
+	Test set, feature = 2: Mean = 0.0556231122134, variance = 0.797590331684
+	Test set, feature = 3: Mean = 0.113183870596, variance = 1.99040213886
+	Test set, feature = 4: Mean = 0.071573768538, variance = 1.66604029201
+	Test set, feature = 5: Mean = 0.0869148906279, variance = 2.13673680831
+	Test set, feature = 6: Mean = 0.11567238855, variance = 1.92226228418
+	Test set, feature = 7: Mean = 0.0870155300787, variance = 2.13767335461
+	Test set, feature = 8: Mean = 0.248982135224, variance = 1.77195651078	
+	Test set, feature = 9: Mean = 0.2451873402, variance = 1.82895633206
+	Test set, feature = 10: Mean = 0.22956619607, variance = 1.71731489777
+	Test set, feature = 11: Mean = 0.250890507791, variance = 1.77783879058
+	Test set, feature = 12: Mean = 0.316608257189, variance = 2.1902285482
+	Test set, feature = 13: Mean = 0.229602833976, variance = 1.71745429545
+	Test set, feature = 14: Mean = 0.149057020979, variance = 2.66297001969
+	Test set, feature = 15: Mean = -0.0567634602313, variance = 1.36090146496
+	Test set, feature = 16: Mean = 0.0735676557785, variance = 1.08263292728
+	Test set, feature = 17: Mean = 0.0867669827243, variance = 0.951308458665
+	Test set, feature = 18: Mean = 0.154772446101, variance = 1.21651004673
+	Test set, feature = 19: Mean = 0.310694549709, variance = 1.36280271312
+	Test set, feature = 20: Mean = 0.087416429507, variance = 1.13351688737
+	Test set, feature = 21: Mean = 0.168576603142, variance = 1.41470112481
+	\end{lstlisting}
+	\caption{Mean and variances of normalized data sets}
+	\label{fig:mean_variance_data}
+\end{figure}
+
 
 \subsection{Model using grid-search}
+\subsubsection{Implementation}
+In order to utilize grid-search and determine appropriate SVM hyperparameters $\gamma$ and $C$, the python library \texttt{scikit-learn}\footnote{\url{http://scikit-learn.org/}} was used. The library features an SVM implementation, which is documented in the following link: \url{http://scikit-learn.org/stable/modules/svm.html}.\\
+
+The SVM hyperparameters were calculating by iterating each combination of pairs of $\gamma$ and $C$ and performing 5-fold cross-validation on these pairs. The mean of the accuracies computed for each 5-fold cross-validation was stored along with its corresponding parameter pair. The appropriate SVM hyperparameter pair was then simply selected from the pair generating the smallest loss.
+
+\subsubsection{Results}
+The following hyperparameter configurations and accuracies were computed for the regular- and normalized dataset.
+
+\begin{figure}[H]
+	\begin{lstlisting}
+	Training set: Hyperparameter config = (1, 0.001)
+	Training set: Accuracy = 0.810526315789
+	Test set: Accuracy = 0.824742268041
+	Normalized Training set: Hyperparameter config = (1, 0.01)
+	Normalized Training set: Accuracy = 0.884210526316
+	Normalized Test set: Accuracy = 0.865979381443
+	\end{lstlisting}
+	\caption{Mean and variances of normalized data sets}
+	\label{fig:grid_search_results}
+\end{figure}
+
+% TODO: discuss normalization effects
+As seen in ~\ref{fig:grid_search_results}, the normalized data sets resulted in more accurate classifications and reported a different best hyperparameter configuration, compared to the non-normalized training set. This is because reasons
+
 
 \subsection{Inspecting the kernel expansion}
 
 \subsubsection{Support vectors}
+% For discussion of different C choices see http://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel
 
 \subsubsection{Scaling behaviour}
 
