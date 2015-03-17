@@ -132,6 +132,26 @@ Figure \ref{fig:partial_derivatives} compares the derivatives found using back-p
 \end{figure}
 
 \subsection{Neural network training}
+We had a hard time getting our network to converge for some of the combinations of learning rates and number of hidden neurons $M$. Especially for large values of $M$ it seems to never terminate. Since we pick the starting weights at random, the convergence is also very unpredictable. We have defined the conditions for stopping the training to be that each partial derivative in the gradient must be smaller than an $\varepsilon$, which we arbitrarily set to $0.01$. Since we had a hard time getting the network to converge, figure \ref{fig:course_of_learning} only shows the course of learning for $M \in \{ 2, 4 \}$ and $\text{learning\_rate} \in \{ 0.1, 0.5 \}$.
+
+\begin{figure}[H]
+  \begin{adjustwidth}{-7em}{-7em}
+    \centering
+    \includegraphics[width=.47\linewidth]{figures/course_of_learning1.png}
+    \includegraphics[width=.47\linewidth]{figures/course_of_learning2.png}
+  \end{adjustwidth}
+  \caption{Course of learning for different learning rates and number of hidden neurons.}
+  \label{fig:course_of_learning}
+\end{figure}
+
+We picked the trained networked that obtained the best training error out of the four networks trained above. Figure \ref{fig:sinc} shows the real sinc-function plotted along with the output of this network.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.7\linewidth]{figures/sinc.png}
+  \caption{The real sinc function and the sinc function computed using the network.}
+  \label{fig:sinc}
+\end{figure}
 
 \section{Support Vector Machines}
 \subsection{Data normalization}
