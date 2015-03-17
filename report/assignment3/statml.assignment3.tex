@@ -9,6 +9,9 @@
 \usepackage{dsfont}
 \usepackage{lmodern}
 \usepackage{listings}
+\lstset{
+  basicstyle = \footnotesize
+}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[strict]{changepage} % Use to change pagedimensions
@@ -32,6 +35,100 @@
 \section{Neural Networks}
 
 \subsection{Neural network implementation}
+\subsubsection{Derivative of the activation function}
+Consider the activation function for the hidden neurons
+\begin{align*}
+  h(a) = \frac{a}{1 + \left| a \right| }
+\end{align*}
+Recall that the derivative of $f/g$ is $(f' \cdot g - f \cdot g')/g^2$. For $a > 0$ we have $\left| a \right| = a$, so $h(a)$ becomes
+\begin{align*}
+  h(a) = \frac{a}{1 + a}
+\end{align*}
+and the derivative is
+\begin{align*}
+  h'(a) &= \frac{1 \cdot (1 + a) - a \cdot 1}{(1 + a)^2}
+  \\ &= \frac{1 + a - a}{(1 + a)^2}
+  \\ &= \frac{1}{(1 + a)^2}
+  \\ &= \frac{1}{(1 + \left | a \right| )^2}
+\end{align*}
+
+For $a < 0$ we have $\left| a \right| = -a$, so $h(a)$ becomes
+\begin{align*}
+  h(a) = \frac{a}{1 - a}
+\end{align*}
+and the derivative is
+\begin{align*}
+  h'(a) &= \frac{1 \cdot (1 - a) - a \cdot (-1)}{(1 - a)^2}
+  \\ &= \frac{1 - a + a}{(1 - a)^2}
+  \\ &= \frac{1}{(1 - a)^2}
+  \\ &= \frac{1}{(1 + \left | a \right| )^2}
+\end{align*}
+
+For $a = 0$ we have $\left| a \right| = 0$, so $h(a)$ simply becomes
+\begin{align*}
+  h(a) = \frac{a}{1 + 0} = a
+\end{align*}
+and the derivative is
+\begin{align*}
+  h'(a) &= 1
+  \\ &= \frac{1}{(1 + 0)^2}
+  \\ &= \frac{1}{(1 + \left| a \right|)^2}
+\end{align*}
+
+\subsubsection{Implementation}
+When creating a new neural network, the initialisation of the network requires supplying the parameters $D$, $M$ and $K$, specifying the dimensionality of the input patterns, the number of hidden neurons in the network, and the dimensionality of the network output, respectively. We also supply the filename of the dataset that the network is going to be run on. The initialisation starts by creating $D+1$ input neurons (one bias), $M+1$ hidden neurons (again one bias) and $K$ output neurons. Connections are established from every input neuron to every hidden neuron (except to the hidden bias which has no incoming connections) and from every hidden neuron to every output neuron. The weights of the connections are set to arbitrary values. We have chosen to draw them uniformly at random from the interval between $-1$ and $1$. Note that because of this randomness, we get different results for the initial weights and derivatives each time we start a new network on the same input data. We store the weights in a dictionary that maps pairs of neurons to weights.\\
+
+When running the network on a dataset, we do forward-propagation and then back-propagation on each input pattern in turn. In the forward-propagation phase, each layer computes its output values so that the values can be used as inputs to the next layer. In the back-propagation phase, the output neurons compute the $\delta$'s and use them in the computation of the partial derivatives for the weights of the incoming connections. The hidden neurons then do the same, using the $\delta$'s of the output neurons to compute their own $\delta$'s (back-propagation). In the same manner as the weights, the partial derivatives are stored in a dictionary that maps pairs of neurons to partial derivatives.\\
+
+For each input pattern, the partial derivatives are accumulated, and we also accumulate the squared error values for each pattern (the error values are used when numerically estimating the derivatives using finite differences). When all input patterns have been processed, the accumulated squared error is divided by the number of input patterns $N$ to give the mean-squared error. Since the computed partial derivatives are derivatives of this mean-squared error function, we also divide the partial derivatives by $N$ so that they correspond to the mean-squared error. However, when comparing the produced partial derivatives to the numerically estimated ones (see section \ref{gradient_verification} below), we don't get matching results, and we noticed that the results seem to differ quite precisely by a factor of $2$. We find this a bit odd, but we think that the reason might be the following. We are considering a mean-squared error function, so it has the form
+\begin{align}
+  E = \frac{1}{N} \sum_{n=1}^{N} E_n \label{eq_E}
+\end{align}
+where each $E_n$ has the form
+\begin{align*}
+  E_n = F_n^2
+\end{align*}
+Putting this into (\ref{eq_E}) and thus making the exponent explicit, we have
+\begin{align*}
+  E = \frac{1}{N} \sum_{n=1}^{N} F_n^2
+\end{align*}
+When taking derivatives, we get
+\begin{align*}
+  E' = \frac{1}{N} \sum_{n=1}^{N} E_n' = \frac{1}{N} \sum_{n=1}^{N} 2 F_n' = \frac{2}{N} \sum_{n=1}^{N} F_n'
+\end{align*}
+Here it makes sense that in order to compute the derivative of the mean-squared error function, we divide by $N$ and multiply by a factor of $2$. However, we would expect the back-propagation method to compute the derivatives $E_n'$ and not $F_n'$ (i.e., without the exponent). We cannot tell from the book which one it is, but from our results it seems to be the latter. Thus, we decided to multiply the derivatives by a factor of $2$, even though we don't fully understand why (or if) that is the right thing to do. Now, our produced partial derivatives fit nicely with the numerical estimates.
+
+\subsubsection{Verification of gradient computation} \label{gradient_verification}
+Figure \ref{fig:partial_derivatives} compares the derivatives found using back-propagation to the numerically estimated ones (using finite differences) for a particular run on the sinc training data. We see that the results fit nicely.
+
+\begin{figure}[H]
+	\begin{lstlisting}
+        Partial derivatives
+        (InputNeuron0, HiddenNeuron1):
+        	0.0163222087106
+        	0.0163222116378
+        (InputNeuron0, HiddenNeuron2):
+        	0.0312768666339
+        	0.0312768713706
+        (InputNeuron1, HiddenNeuron1):
+        	-0.00697687322631
+        	-0.00697687047024
+        (InputNeuron1, HiddenNeuron2):
+        	-0.0187086727315
+        	-0.0187086721115
+        (HiddenNeuron0, OutputNeuron1):
+        	-0.366544258929
+        	-0.366544250507
+        (HiddenNeuron1, OutputNeuron1):
+        	0.150453402067
+        	0.150453423331
+        (HiddenNeuron2, OutputNeuron1):
+        	-0.163250539134
+        	-0.163250540863
+        \end{lstlisting}
+	\caption{Partial derivatives, computed with backpropagation and numerical estimation.}
+	\label{fig:partial_derivatives}
+\end{figure}
 
 \subsection{Neural network training}
 
